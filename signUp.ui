@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>signUp</class>
+ <widget class="QWidget" name="signUp">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>548</width>
+    <height>484</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QLabel" name="lblKullaniciTip">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>100</y>
+     <width>150</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Kullanici Tipi</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lbliSim">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>140</y>
+     <width>150</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>İsim</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblSoyisim">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>180</y>
+     <width>150</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Soyisim</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblKullaniciAd">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>220</y>
+     <width>150</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Kullanici Adi</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblSifre">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>260</y>
+     <width>150</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Sifre</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="lblGuvenlik">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>300</y>
+     <width>151</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Guvenlik Sorusu Seciniz:</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="cmbKullaniciTip">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>100</y>
+     <width>151</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>admin</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>sinav sorumlusu</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>ogrenci</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QLineEdit" name="txtiSim">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>140</y>
+     <width>113</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="txtSoyisim">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>180</y>
+     <width>113</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="txtKullaniciAd">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>220</y>
+     <width>113</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="txtSifre">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>260</y>
+     <width>113</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="cmbGuvenlik">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>300</y>
+     <width>181</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>ilkokul ogretmeninizin adi</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>evcil hayvaninizin adi</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>en sevdiginiz renk</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>diger (özel güvenlik önlemi)</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QLabel" name="lblGubenlikAnswer">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>340</y>
+     <width>161</width>
+     <height>30</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Guvenlik Sorusunun Cevabı:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="txtGuvenlikAnswer">
+   <property name="geometry">
+    <rect>
+     <x>290</x>
+     <y>340</y>
+     <width>191</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>380</x>
+     <y>410</y>
+     <width>93</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Kayit ol</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
