@@ -1,9 +1,14 @@
 from email.mime import application
 from PyQt5 import QtWidgets
 import sys
+
+from psutil import cpu_count
 from MainWindow import Ui_GirisEkrani
 from SifreUnut import Ui_SifreUnuttum
 from signUp import Ui_signUp
+from addQuestion import Ui_SoruEkle
+from dersEkle import Ui_dersEkle
+from konuEkle import  Ui_addSection
 import sqlite3
 
 class myApp(QtWidgets.QMainWindow):
@@ -24,7 +29,6 @@ class myApp(QtWidgets.QMainWindow):
         userType = 0
         if self.loginUi.rdBtnAdmin.isChecked():
             userType = 1
-            print("a")
         elif self.loginUi.rdBtnOgrenci.isChecked():
             userType = 2
         elif self.loginUi.rdBtnSinavSorumlusu.isChecked():
@@ -34,15 +38,18 @@ class myApp(QtWidgets.QMainWindow):
         
         cursor.execute("SELECT * FROM users WHERE username =? AND password=? AND userType = ?",(username,password,userType))
         row = cursor.fetchone()
-        
+        db.close() # close sonradan eklendi 
         if row:
             self.showMessageBox('basarili','giris basarili')
+            if userType == 3:
+                self.addQuestionShow()
+                
+            
         else:
             self.showMessageBox('error','giris basarisiz')
         
-
-
     def showMessageBox(self,title,message):
+
         msgBox = QtWidgets.QMessageBox()
         msgBox.setIcon(QtWidgets.QMessageBox.Information)
         msgBox.setWindowTitle(title)
@@ -50,6 +57,75 @@ class myApp(QtWidgets.QMainWindow):
         msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
         msgBox.exec_()
     
+    def addQuestionShow(self): #sinav sorumlusunun soru ekleme kısmı
+        #--------------------------------------------------------------------------------
+        self.addQuestionWindow = QtWidgets.QDialog()
+        self.addQuestionForm = Ui_SoruEkle()        
+
+        def showLessons(self): #database'deki dersleri combobox'ta göstermek
+            connection = sqlite3.connect('examination.db')
+            connection.cursor()
+            result = connection.execute("SELECT lessonName FROM lessons")
+            
+            values = result.fetchall()
+            connection.close()
+            print(values)
+            for i in range(len(values)):
+                self.addQuestionForm.DersSec_cmbox.addItem(values[i][0])
+        
+        def showUnits(self): #database'deki uniteleri combobox'ta göstermek
+            
+        
+            connection = sqlite3.connect('examination.db')
+            connection.cursor()
+            result = connection.execute("SELECT unitName FROM units")
+            
+            values = result.fetchall()
+            connection.close()
+            for i in range(len(values)):
+                self.addQuestionForm.KonuSec_cmbox.addItem(values[i][0])
+                    
+        self.addQuestionForm.setupUi(self.addQuestionWindow)
+
+        #showLessons(self) #self sonradan eklendi
+        showUnits(self)
+        showLessons(self)
+        self.addQuestionWindow.show()
+        #---------------------------------------------------------------------------------
+        
+                  
+        self.addQuestionForm.DersEkle_btn.clicked.connect(self.showdersEkle)
+        self.addQuestionForm.KonuEkle_btn.clicked.connect(self.showAddSection)
+               
+    def showdersEkle(self):    #icerde olmuyor
+        self.showDersEkleWindow = QtWidgets.QDialog()
+        self.showDersEkleForm = Ui_dersEkle()
+        self.showDersEkleForm.setupUi(self.showDersEkleWindow)
+        self.showDersEkleWindow.show()
+        self.showDersEkleForm.dersEkle_btn.clicked.connect(self.dersEkle)
+            
+    def dersEkle(self):
+        lessonName = self.showDersEkleForm.lineEdit.text()
+        print(lessonName)
+        connection = sqlite3.connect('examination.db')
+        connection.cursor()
+        connection.execute("INSERT INTO lessons (lessonName) VALUES(?)",(lessonName,))
+        connection.commit()
+        connection.close()
+        self.showDersEkleWindow.close()
+        self.addQuestionShow() #eklenen dersin güncel olarak gözükmesi icin addQuestionShow'u tekrar cagırmamız gerek
+    
+        
+
+    def showAddSection(self):
+        pass
+
+    def addImage(self):
+        pass
+
+    def saveQuestion(self):
+        pass    
+
     def signUpShow(self):
         self.signUpWindow = QtWidgets.QDialog()
         self.signUpForm = Ui_signUp()
@@ -103,7 +179,7 @@ class myApp(QtWidgets.QMainWindow):
         
         result = connection.execute("SELECT * FROM users WHERE username =? AND validationAnswer=?",(username,validation))
         row = result.fetchone()
-        connection.close()
+        
         print(row)
         if row:
             connection = sqlite3.connect('examination.db')
@@ -112,12 +188,12 @@ class myApp(QtWidgets.QMainWindow):
             connection.close()
             self.showMessageBox('basarili','sifreniz basariyla yenilendi')
             self.sifreUnutWindow.close()
-            
-        else:
-            self.showMessageBox('error','giris basarisiz')
-            
         
-
+        else:
+            self.showMessageBox('error','giris bilgileri yanlis')
+        
+        connection.close()     
+        
 def app():
     app = QtWidgets.QApplication(sys.argv)
     win = myApp()

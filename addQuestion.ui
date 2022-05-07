@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SoruEkle</class>
+ <widget class="QWidget" name="SoruEkle">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>978</width>
+    <height>832</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Soru ekle</string>
+  </property>
+  <widget class="QLabel" name="DersSec_lbl">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>80</y>
+     <width>311</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Ders Seciniz, Listede Yoksa Yeni Ders Ekleyebilirsiniz</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="KonuSec_lbl">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>130</y>
+     <width>311</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Konu Seciniz, Listede Yoksa Yeni Konu Ekleyebilirsiniz</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="DersSec_cmbox">
+   <property name="geometry">
+    <rect>
+     <x>470</x>
+     <y>90</y>
+     <width>221</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="DersEkle_btn">
+   <property name="geometry">
+    <rect>
+     <x>710</x>
+     <y>90</y>
+     <width>93</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Ders ekle</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="KonuSec_cmbox">
+   <property name="geometry">
+    <rect>
+     <x>470</x>
+     <y>140</y>
+     <width>221</width>
+     <height>22</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="KonuEkle_btn">
+   <property name="geometry">
+    <rect>
+     <x>710</x>
+     <y>140</y>
+     <width>93</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Konu ekle</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="SoruMetni_lbl">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>190</y>
+     <width>121</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Soru Metnini Giriniz:</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="SoruMetni_txt">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>200</y>
+     <width>521</width>
+     <height>191</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="Asikki_lbl">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>430</y>
+     <width>51</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>A sikki</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="Asikki_txt">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>430</y>
+     <width>521</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="Bsikki_lbl">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>470</y>
+     <width>51</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>B sikki</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="Dsikki_lbl">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>550</y>
+     <width>51</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>D sikki</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="Csikki_lbl">
+   <property name="geometry">
+    <rect>
+     <x>140</x>
+     <y>510</y>
+     <width>51</width>
+     <height>31</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>C sikki</string>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="Bsikki_txt">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>470</y>
+     <width>521</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="Csikki_txt">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>510</y>
+     <width>521</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="Dsikki_txt">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>550</y>
+     <width>521</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="RightAnswer_lbl">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>650</y>
+     <width>91</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Dogru Cevap:</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="RightAnswer_cmbox">
+   <property name="geometry">
+    <rect>
+     <x>220</x>
+     <y>650</y>
+     <width>73</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <item>
+    <property name="text">
+     <string>A</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>B</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>C</string>
+    </property>
+   </item>
+   <item>
+    <property name="text">
+     <string>D</string>
+    </property>
+   </item>
+  </widget>
+  <widget class="QPushButton" name="GorselEkle_btn">
+   <property name="geometry">
+    <rect>
+     <x>650</x>
+     <y>650</y>
+     <width>151</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Gorsel ekle</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="Kaydet_btn">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>750</y>
+     <width>671</width>
+     <height>51</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Kaydet</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
