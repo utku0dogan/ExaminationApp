@@ -96,6 +96,7 @@ class myApp(QtWidgets.QMainWindow):
         #-------------------SINAV SORUMLUSU EKRANI BUTON BAĞLANTILARI--------------------
         self.addQuestionForm.DersEkle_btn.clicked.connect(self.showdersEkle)
         self.addQuestionForm.KonuEkle_btn.clicked.connect(self.showAddSection)
+        self.addQuestionForm.Kaydet_btn.clicked.connect(self.saveQuestion)
         #--------------------------------------------------------------------------------
 
 
@@ -115,8 +116,10 @@ class myApp(QtWidgets.QMainWindow):
         connection.execute("INSERT INTO lessons (lessonName) VALUES(?)",(lessonName,))
         connection.commit()
         connection.close()
+        
         self.showDersEkleWindow.close()
-        self.addQuestionShow() #eklenen dersin güncel olarak gözükmesi icin addQuestionShow'u tekrar cagırmamız gerek
+        
+        self.addQuestionShow() # ? eklenen dersin güncel olarak gözükmesi icin addQuestionShow'u tekrar cagırmamız gerek
     
     #--------------------------------------VERİ TABANINA YENİ BİR DERS EKLEME BİTİŞ------------------------------------------
 
@@ -161,7 +164,30 @@ class myApp(QtWidgets.QMainWindow):
         pass
 
     def saveQuestion(self):
-        pass    
+        LessonText = self.addQuestionForm.DersSec_cmbox.currentText()
+        SectionText = self.addQuestionForm.KonuSec_cmbox.currentText()
+        questionText = self.addQuestionForm.SoruMetni_txt.text()
+        chooseA = self.addQuestionForm.Asikki_txt.text()
+        chooseB = self.addQuestionForm.Bsikki_txt.text()
+        chooseC = self.addQuestionForm.Csikki_txt.text()
+        chooseD = self.addQuestionForm.Dsikki_txt.text()
+        rightAnswer = self.addQuestionForm.RightAnswer_cmbox.currentText()
+        
+        connection = sqlite3.connect('examination.db')
+        connection.cursor()
+        result = connection.execute("SELECT DISTINCT  lid FROM lessons Where lessonName = ?",(LessonText,))
+        value = result.fetchall()
+        Lid = value[0][0]
+        result = connection.execute("SELECT DISTINCT Uid FROM units WHERE unitName = ?",(SectionText,))
+        value = result.fetchall()
+        Uid = value[0][0]
+
+        connection.execute("INSERT INTO questions (Lid, Uid, questionText, chooseA, chooseB, chooseC, chooseD, rightAnswer) VALUES (?,?,?,?,?,?,?,?)",(Lid,Uid,questionText,chooseA,chooseB,chooseC,chooseD,rightAnswer))
+        connection.commit()
+        connection.close()
+
+        self.showMessageBox("Basarili", "Soru Basariyla Eklendi")
+        
 
     def signUpShow(self):
         self.signUpWindow = QtWidgets.QDialog()
