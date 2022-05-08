@@ -93,10 +93,13 @@ class myApp(QtWidgets.QMainWindow):
         self.addQuestionWindow.show()
         #---------------------------------------------------------------------------------
         
-                  
+        #-------------------SINAV SORUMLUSU EKRANI BUTON BAĞLANTILARI--------------------
         self.addQuestionForm.DersEkle_btn.clicked.connect(self.showdersEkle)
         self.addQuestionForm.KonuEkle_btn.clicked.connect(self.showAddSection)
-               
+        #--------------------------------------------------------------------------------
+
+
+    # --------------------------VERİTABANINA YENİ BİR DERS EKLEME BAŞLANGIÇ-----------------------------------------           
     def showdersEkle(self):    #icerde olmuyor
         self.showDersEkleWindow = QtWidgets.QDialog()
         self.showDersEkleForm = Ui_dersEkle()
@@ -115,10 +118,44 @@ class myApp(QtWidgets.QMainWindow):
         self.showDersEkleWindow.close()
         self.addQuestionShow() #eklenen dersin güncel olarak gözükmesi icin addQuestionShow'u tekrar cagırmamız gerek
     
+    #--------------------------------------VERİ TABANINA YENİ BİR DERS EKLEME BİTİŞ------------------------------------------
+
+    #--------------------------------------VERİTABANINA DERSE BAĞLI KONU EKLEME BAŞLANGIÇ----------------------------------------
+    def showAddSection(self):
+        self.addSectionWindow = QtWidgets.QDialog()
+        self.addSectionForm = Ui_addSection()
+        self.addSectionForm.setupUi(self.addSectionWindow)
+        self.addSectionWindow.show()
+       
+        def showLesson(self): # konu eklenecek dersi secmek icin combobox'ta göstermek 
+            connection = sqlite3.connect('examination.db')
+            connection.cursor()
+            result = connection.execute("SELECT lessonName FROM lessons")
+            
+            values = result.fetchall()
+            connection.close()
+            for i in range(len(values)):
+                 self.addSectionForm.konEkle_cmb.addItem(values[i][0])
+            
+        showLesson(self)
+        self.addSectionForm.konuEkle_btn.clicked.connect(self.AddSection)
+
+    def AddSection(self):
+        LessonText = self.addSectionForm.konEkle_cmb.currentText()
+        unitName = self.addSectionForm.konuEkle_txt.text()
+        connection = sqlite3.connect('examination.db')
+        connection.cursor()
+        result = connection.execute("SELECT DISTINCT  lid FROM lessons Where lessonName = ?",(LessonText,))
+        value = result.fetchall()
+        Lid = value[0][0]
+        connection.execute("Insert Into units (Lid, unitName) VALUES(?,?)",(Lid, unitName))
+        connection.commit()
+        connection.close()
+        self.addSectionWindow.close()
+        self.addQuestionShow()
         
 
-    def showAddSection(self):
-        pass
+    # ------------------------------------VERİ TABANINA DERSE BAĞLI KONU EKLEME BİTİŞ------------------------------------------------------------------
 
     def addImage(self):
         pass
