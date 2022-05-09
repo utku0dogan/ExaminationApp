@@ -1,0 +1,11 @@
+CURRENT UİD ÜZERİNDEN
+----ilk gün
+timesKnown 0 olanlardan rastgele 10 tane getir.
+bilinirse timesKnown'u 1 yap studentsPrefer'den first'e bak ve nextDate'i ona göre update et
+----ikinci gün
+timesKnown 0 olanlardan rastgele 10 tane getir.
+varsa nextDate'i bugün olanları getir bilinemezse timesKnown'u 0 yap
+bilinirse timesKnown'u 2 yap studentsprefer'den second'a bk nextDate'i ona göre update et
+
+
+

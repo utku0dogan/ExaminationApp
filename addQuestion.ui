@@ -98,22 +98,12 @@
     <string>Soru Metnini Giriniz:</string>
    </property>
   </widget>
-  <widget class="QLineEdit" name="SoruMetni_txt">
-   <property name="geometry">
-    <rect>
-     <x>280</x>
-     <y>200</y>
-     <width>521</width>
-     <height>191</height>
-    </rect>
-   </property>
-  </widget>
   <widget class="QLabel" name="Asikki_lbl">
    <property name="geometry">
     <rect>
      <x>140</x>
      <y>430</y>
-     <width>51</width>
+     <width>61</width>
      <height>31</height>
     </rect>
    </property>
@@ -136,7 +126,7 @@
     <rect>
      <x>140</x>
      <y>470</y>
-     <width>51</width>
+     <width>61</width>
      <height>31</height>
     </rect>
    </property>
@@ -149,7 +139,7 @@
     <rect>
      <x>140</x>
      <y>550</y>
-     <width>51</width>
+     <width>61</width>
      <height>31</height>
     </rect>
    </property>
@@ -162,7 +152,7 @@
     <rect>
      <x>140</x>
      <y>510</y>
-     <width>51</width>
+     <width>61</width>
      <height>31</height>
     </rect>
    </property>
@@ -246,9 +236,9 @@
   <widget class="QPushButton" name="GorselEkle_btn">
    <property name="geometry">
     <rect>
-     <x>650</x>
-     <y>650</y>
-     <width>151</width>
+     <x>570</x>
+     <y>620</y>
+     <width>231</width>
      <height>51</height>
     </rect>
    </property>
@@ -267,6 +257,26 @@
    </property>
    <property name="text">
     <string>Kaydet</string>
+   </property>
+  </widget>
+  <widget class="QTextEdit" name="SoruMetni_txt">
+   <property name="geometry">
+    <rect>
+     <x>280</x>
+     <y>200</y>
+     <width>521</width>
+     <height>201</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLineEdit" name="gorselPath_txt">
+   <property name="geometry">
+    <rect>
+     <x>570</x>
+     <y>690</y>
+     <width>231</width>
+     <height>22</height>
+    </rect>
    </property>
   </widget>
  </widget>
