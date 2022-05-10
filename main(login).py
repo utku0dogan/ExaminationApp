@@ -12,6 +12,7 @@ from dersEkle import Ui_dersEkle
 from konuEkle import  Ui_addSection
 from StudentEntryPage import Ui_StudentEntry
 from sigma import Ui_sigma
+from ayarlar import Ui_Ayarlar
 import sqlite3
 from PyQt5.QtWidgets import (QWidget, QHBoxLayout,QLabel, QApplication)
 from PyQt5.QtGui import QPixmap
@@ -189,6 +190,7 @@ class myApp(QtWidgets.QMainWindow):
         self.addSectionWindow.close()
         self.addQuestionShow()
         
+        
 
     # ------------------------------------VERİ TABANINA DERSE BAĞLI KONU EKLEME BİTİŞ------------------------------------------------------------------
 
@@ -221,9 +223,17 @@ class myApp(QtWidgets.QMainWindow):
         connection.close()
 
         self.showMessageBox("Basarili", "Soru Basariyla Eklendi")
-    
+        self.addQuestionForm.Asikki_txt.clear()
+        self.addQuestionForm.Bsikki_txt.clear()
+        self.addQuestionForm.Csikki_txt.clear()
+        self.addQuestionForm.Dsikki_txt.clear()
+        self.addQuestionForm.gorselPath_txt.clear()
+        self.addQuestionForm.SoruMetni_txt.clear()
     #---------------------------------------------------------SORUYU KAYDETME BİTİŞ----------------------------------------------------------------
 
+
+
+    #---------------------------------------------------------ÖĞRENCİ EKRANI BAŞLANGIÇ-------------------------------------------------------------
     def showStudentEntry(self):
         self.studentEntryWindow = QtWidgets.QDialog()
         self.studentEntryForm = Ui_StudentEntry()
@@ -238,6 +248,7 @@ class myApp(QtWidgets.QMainWindow):
         self.studentEntryForm.welcome_lbl.setText("Hos geldiniz, " + currentUserName + ' basarilar...')
         self.studentEntryWindow.show()
         self.studentEntryForm.sigma_btn.clicked.connect(self.showSigmaModule)
+        self.studentEntryForm.ayarlar_btn.clicked.connect(self.ShowUserSettings)
 
 
     def showSigmaModule(self):
@@ -312,14 +323,42 @@ class myApp(QtWidgets.QMainWindow):
             
 
         
+    def ShowUserSettings(self):
 
+        self.settingsWindow = QtWidgets.QDialog()
+        self.settingsForm = Ui_Ayarlar()
+        self.settingsForm.setupUi(self.settingsWindow)
+
+        self.settingsWindow.show()
+
+        self.settingsForm.kaydet_btn.clicked.connect(self.AyarKaydet)
+
+    def AyarKaydet(self):
+        birDongu = self.settingsForm.birDongu_txt.text()
+        ikiDongu = self.settingsForm.ikiDongu_txt.text()
+        ucDongu = self.settingsForm.ucDongu_txt.text()
+        dortDongu = self.settingsForm.dortDongu_txt.text()
+        besDongu = self.settingsForm.besDongu_txt.text()
+        altiDongu = self.settingsForm.altiDongu_txt.text()
+        connection = sqlite3.connect('examination.db')
+        connection.cursor()
+        connection.execute(f"UPDATE settings SET first = {birDongu}, second = {ikiDongu}, third = {ucDongu}, fourth = {dortDongu}, fifth = {besDongu}, sixth = {altiDongu} WHERE id = ?",(currentUserID,))
+        connection.commit()
+        connection.close()
+        self.showMessageBox("Basarili","Ayarlar basariyla degisti")
+        
+        self.settingsWindow.close()
         
 
 
 
 
 
-        
+
+
+    #-------------------------------------------------------ÖĞRENCİ EKRANI BİTİŞ------------------------------------------------------------------
+
+
 
     #---------------------------------------------------------KAYIT BAŞLANGIÇ----------------------------------------------------------------------
     def signUpShow(self):
@@ -353,11 +392,22 @@ class myApp(QtWidgets.QMainWindow):
             
         connection.commit()
         connection.close()
+
+        if userType == 2:
+            connection = sqlite3.connect('examination.db')
+            connection.cursor()
+            result = connection.execute("SELECT id From users Where userName = ? AND password = ?",(username, password))
+            value = result.fetchone()
+            id = value[0]
+            
+            connection.execute("INSERT INTO settings (id) VALUES (?)",(id,))
+            connection.commit()
+            connection.close()
         self.showMessageBox('Bilgi', f'{username} Kayit İslemi Basarili, {self.signUpForm.cmbKullaniciTip.currentText()} olarak Giris Yapabilirsiniz.')
         self.signUpWindow.close()
 
     #---------------------------------------------------------------KAYIT BİTİŞ---------------------------------------------------------------------
-
+    
 
     #----------------------------------------------------------ŞİFRE UNUT BAŞLANGIÇ-----------------------------------------------------------------
     def ShowSifreUnut(self):
