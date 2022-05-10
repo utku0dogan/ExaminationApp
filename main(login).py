@@ -11,7 +11,10 @@ from addQuestion import Ui_SoruEkle
 from dersEkle import Ui_dersEkle
 from konuEkle import  Ui_addSection
 from StudentEntryPage import Ui_StudentEntry
+from sigma import Ui_sigma
 import sqlite3
+from PyQt5.QtWidgets import (QWidget, QHBoxLayout,QLabel, QApplication)
+from PyQt5.QtGui import QPixmap
 
 class myApp(QtWidgets.QMainWindow):
     
@@ -43,7 +46,7 @@ class myApp(QtWidgets.QMainWindow):
         cursor.execute("SELECT * FROM users WHERE username =? AND password=? AND userType = ?",(username,password,userType))
         
         row = cursor.fetchone()
-        
+        global currentUserID
         db.close() # close sonradan eklendi 
         if row:
             connection = sqlite3.connect('examination.db')
@@ -57,7 +60,7 @@ class myApp(QtWidgets.QMainWindow):
                 
                 self.addQuestionShow()
             if userType == 2:
-                self.showStudentEntry(currentUserID)
+                self.showStudentEntry()
                 
             
         else:
@@ -211,7 +214,7 @@ class myApp(QtWidgets.QMainWindow):
         value = result.fetchall()
         Uid = value[0][0]
         if imagePath == '':
-            connection.execute("INSERT INTO questions (Lid, Uid, questionText, chooseA, chooseB, chooseC, chooseD, rightAnswer) VALUES (?,?,?,?,?,?,?,?)",(Lid,Uid,questionText,chooseA,chooseB,chooseC,chooseD,rightAnswer))
+            connection.execute("INSERT INTO questions (Lid, Uid, questionText, imagePath, chooseA, chooseB, chooseC, chooseD, rightAnswer) VALUES (?,?,?,?,?,?,?,?,?)",(Lid,Uid,questionText,'0',chooseA,chooseB,chooseC,chooseD,rightAnswer))
         else:
             connection.execute("INSERT INTO questions (Lid, Uid, questionText, imagePath, chooseA, chooseB, chooseC, chooseD, rightAnswer) VALUES (?,?,?,?,?,?,?,?,?)",(Lid,Uid,questionText,imagePath,chooseA,chooseB,chooseC,chooseD,rightAnswer))
         connection.commit()
@@ -221,21 +224,102 @@ class myApp(QtWidgets.QMainWindow):
     
     #---------------------------------------------------------SORUYU KAYDETME BİTİŞ----------------------------------------------------------------
 
-    def showStudentEntry(self, currentUserID):
+    def showStudentEntry(self):
         self.studentEntryWindow = QtWidgets.QDialog()
         self.studentEntryForm = Ui_StudentEntry()
         self.studentEntryForm.setupUi(self.studentEntryWindow)
         connection = sqlite3.connect('examination.db')
         connection.cursor()
-        print(currentUserID)
+        
         result = connection.execute("SELECT userName FROM users WHERE id = ?",(currentUserID,))
         value = result.fetchall()
         currentUserName = value[0][0]
         connection.close()
-        self.studentEntryForm.welcome_lbl.setText("Hos geldiniz: " + currentUserName + ' basarilar')
+        self.studentEntryForm.welcome_lbl.setText("Hos geldiniz, " + currentUserName + ' basarilar...')
         self.studentEntryWindow.show()
+        self.studentEntryForm.sigma_btn.clicked.connect(self.showSigmaModule)
+
+
+    def showSigmaModule(self):
+        self.sigmaWindow = QtWidgets.QDialog()
+        self.sigmaForm = Ui_sigma()
+        self.sigmaForm.setupUi(self.sigmaWindow)
+        
+            
+        
+        self.extractQuestionDB()
+    
+    def extractQuestionDB(self):
+        
+        connection = sqlite3.connect('examination.db')
+        connection.cursor()
+        result = connection.execute("SELECT Qid FROM questions")
+        values = result.fetchall()
+        
+        connection.close()
+        Qid = []
+        for i in range(len(values)):
+            Qid.append(values[i][0])
+        print(Qid)
+
+        for i in range(len(Qid)):
+            connection = sqlite3.connect('examination.db')
+            connection.cursor()
+            result = connection.execute("SELECT imagePath FROM questions WHERE Qid = ?",(Qid[i],))
+            value = result.fetchone()
+            connection.close()
+            if value[0][0] == '0':
+                connection = sqlite3.connect('examination.db')
+                connection.cursor()
+                result = connection.execute("SELECT questionText, chooseA, chooseB, choosec, chooseD  FROM questions WHERE Qid = ?",(Qid[i],))
+                values = result.fetchone()
+                connection.close()
+                
+                self.showQuestion(values)
+                
+            else:
+                connection = sqlite3.connect('examination.db')
+                connection.cursor()
+                result = connection.execute("SELECT questionText, chooseA, chooseB, choosec, chooseD, imagePath  FROM questions WHERE Qid = ?",(Qid[i],))
+                values = result.fetchone()
+                connection.close()
+                
+                self.showQuestion(values)
+
+    def showQuestion(self, values):
+        if len(values) == 5:
+            self.sigmaForm.question_txt.setText(values[0])
+            self.sigmaForm.a_txt.setText(values[1])
+            self.sigmaForm.b_txt.setText(values[2])
+            self.sigmaForm.c_txt.setText(values[3])
+            self.sigmaForm.d_txt.setText(values[4])
+            
+            self.sigmaWindow.show()
+            
+        if len(values) == 6:
+            self.sigmaForm.question_txt.setText(values[0])
+            self.sigmaForm.a_txt.setText(values[1])
+            self.sigmaForm.b_txt.setText(values[2])
+            self.sigmaForm.c_txt.setText(values[3])
+            self.sigmaForm.d_txt.setText(values[4])
+            path = values[5]
+            
+            self.pixmap = QPixmap(path)
+            self.sigmaForm.image_lbl.setPixmap(self.pixmap)
+            self.sigmaForm.image_lbl.setScaledContents(True)
+            
+            self.sigmaWindow.show()
+            
+
         
 
+        
+
+
+
+
+
+        
 
     #---------------------------------------------------------KAYIT BAŞLANGIÇ----------------------------------------------------------------------
     def signUpShow(self):
@@ -310,6 +394,8 @@ class myApp(QtWidgets.QMainWindow):
         
         connection.close()     
     #--------------------------------------------------------ŞİFRE UNUT BİTİŞ----------------------------------------------------------------------   
+
+
 def app():
     app = QtWidgets.QApplication(sys.argv)
     win = myApp()

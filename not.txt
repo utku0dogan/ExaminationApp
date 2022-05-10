@@ -1,2 +1,3 @@
 pyuic5 designer.ui -o designer.py
 database sorguda tek degiskenden sonra virgül koy
+self.studentEntryForm.sigma_btn.clicked.connect(lambda : self.showSigmaModule(self.currentUserID))
