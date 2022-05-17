@@ -77,6 +77,10 @@ class Ui_sigma(object):
         self.image_lbl.setGeometry(QtCore.QRect(140, 20, 901, 311))
         self.image_lbl.setText("")
         self.image_lbl.setObjectName("image_lbl")
+        self.answer_txt = QtWidgets.QLabel(sigma)
+        self.answer_txt.setGeometry(QtCore.QRect(60, 950, 71, 31))
+        self.answer_txt.setText("")
+        self.answer_txt.setObjectName("answer_txt")
 
         self.retranslateUi(sigma)
         QtCore.QMetaObject.connectSlotsByName(sigma)

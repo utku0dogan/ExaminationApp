@@ -1,7 +1,10 @@
+from ast import get_source_segment
 from email.mime import application
 from PyQt5 import QtWidgets
 import sys
 import time
+
+from sklearn.feature_selection import SelectFromModel
 from GorselEkle import GorselEkle
 from psutil import cpu_count
 from MainWindow import Ui_GirisEkrani
@@ -234,6 +237,7 @@ class myApp(QtWidgets.QMainWindow):
 
 
     #---------------------------------------------------------ÖĞRENCİ EKRANI BAŞLANGIÇ-------------------------------------------------------------
+    
     def showStudentEntry(self):
         self.studentEntryWindow = QtWidgets.QDialog()
         self.studentEntryForm = Ui_StudentEntry()
@@ -251,6 +255,10 @@ class myApp(QtWidgets.QMainWindow):
         self.studentEntryForm.ayarlar_btn.clicked.connect(self.ShowUserSettings)
         global g_qid
         g_qid=0
+        global g_soru
+        g_soru = 0
+        global answers
+        answers= []
         self.studentEntryForm.zayifKonu_btn.clicked.connect(self.ShowExam)
 
 
@@ -329,64 +337,18 @@ class myApp(QtWidgets.QMainWindow):
             self.sigmaWindow.show()
     #----------------------------------------------EXAM EKRANI BAŞLANGIÇ---------------------------------------------------------------
         #---------------------------------------------DB'DEN VERİ CEKME------------------------------------------------------------
-    def dbQuestion(self):
+    def ShowExam(self,g_soru):
+        self.ShowExamWindow = QtWidgets.QDialog()
+        self.ShowExamForm = Ui_sigma()
+        self.ShowExamForm.setupUi(self.ShowExamWindow)
+
+        self.ShowExamWindow.show()
         self.connection = sqlite3.connect('examination.db')
         self.connection.cursor()
         self.result = self.connection.execute("SELECT * FROM questions")
         self.questions = self.result.fetchall()
         global g_NumberQ
         g_NumberQ = len(self.questions)
-        global g_soru
-        g_soru = 0
-        global answers
-        answers = []
-
-        self.examQuestions(g_soru)
-
-    def ShowStats(self):
-        self.showMessageBox("İstatistikler","basarili")
-        print(answers)
-       
-    
-    def soruArti(self,g_soru):
-        answer= ""
-
-        if self.ShowExamForm.a_radio.isChecked():
-            answer = 'A'
-        elif self.ShowExamForm.b_radio.isChecked():
-            answer = 'B'
-        elif self.ShowExamForm.c_radio.isChecked():
-            answer = 'C'
-        elif self.ShowExamForm.d_radio.isChecked():
-            answer = 'D'
-        
-        self.ShowExamWindow.close()
-        answers.append(answer)
-        g_soru+=1
-        if g_soru == 5:
-            
-            self.ShowStats()
-        else:
-            
-            self.ShowExamWindow.show()
-            self.examQuestions(g_soru)
-
-    
-
-        
-    
-    
-    
-
-        
-        
-
-
-    def examQuestions(self, g_soru):
-
-        
-
-    
         CurrentQuestionID = self.questions[g_soru][0]
         print(CurrentQuestionID)
         self.ShowExamForm.question_txt.setText(self.questions[g_soru][3])
@@ -402,41 +364,95 @@ class myApp(QtWidgets.QMainWindow):
             self.ShowExamForm.image_lbl.setScaledContents(True)
         else:
             self.ShowExamForm.image_lbl.setText(" ")
+        self.ShowExamForm.submit_btn.clicked.connect(lambda: self.sumbitbutton(g_soru))
         
+
+    def sumbitbutton(self,g_soru): 
+        answer= ""
+        g_soru+=1
+        if self.ShowExamForm.a_radio.isChecked():
+            answer = 'A'
+        elif self.ShowExamForm.b_radio.isChecked():
+            answer = 'B'
+        elif self.ShowExamForm.c_radio.isChecked():
+            answer = 'C'
+        elif self.ShowExamForm.d_radio.isChecked():
+            answer = 'D'
+        print(answer)
+        answers.append(answer) 
+        self.ShowExamWindow.close()
+           
+        if g_soru == 5:
+            self.ShowExamWindow.close()
+            print(answers)
+        else:
+            self.ShowExam(g_soru)
+
+    # def DB(self):
+    #     self.connection = sqlite3.connect('examination.db')
+    #     self.connection.cursor()
+    #     self.result = self.connection.execute("SELECT * FROM questions")
+    #     self.questions = self.result.fetchall()
+    #     self.connection.close()
+    #     return self.questions
+    
+    # def sorular(self):
+    #     global g_questions 
+    #     g_questions = self.DB()
+    #     self.goster()
+    
+    # def ShowQuestion(self, q):
+    #     self.ShowExamForm.question_txt.setText(q[3])
+    #     self.ShowExamForm.a_txt.setText(q[5])
+    #     self.ShowExamForm.b_txt.setText(q[6])
+    #     self.ShowExamForm.c_txt.setText(q[7])
+    #     self.ShowExamForm.d_txt.setText(q[8])
+
+    #     if not q[4] == '0':
+    #         path = q[4]
+    #         self.pixmap = QPixmap(path)
+    #         self.ShowExamForm.image_lbl.setPixmap(self.pixmap)
+    #         self.ShowExamForm.image_lbl.setScaledContents(True)
+    #     else:
+    #         self.ShowExamForm.image_lbl.setText(" ")
+
+    #     self.ShowExamForm.submit_btn.clicked.connect(self.iArttir)
+
+    
+    
+    
+    # def goster(self):
+    #     #for i in g_questions:
+    #         #self.ShowQuestion(i)
+    #     global g_i
+    #     g_i=0
+    #     self.ShowQuestion(g_questions[g_i])
+    
+    # def iArttir(self):
+    #     g_i +=1
+    #     self.showQuestion(g_questions[g_i])
+
+    # # def ekrandagoster(i):
+    # #     selfformsoru...
+    # #     selfformsoru...
+    # #     SelectFromModel
+    # #     submitbutton next--->
+
+    # def ShowExam(self):
         
-        
-        
-        
-        
-        self.ShowExamForm.submit_btn.clicked.connect(lambda: self.soruArti(g_soru))
-        
-        #print(self.questions[g_soru][1])
-        #print(self.questions[g_soru][2]) #
-        #print(self.questions[g_soru][3]) #question
-        #print(self.questions[g_soru][4]) #image path
-        #print(self.questions[g_soru][5]) #a
-        #print(self.questions[g_soru][6]) #b
-        #print(self.questions[g_soru][7]) #c
-        #print(self.questions[g_soru][8]) #d
-        #print(self.questions[g_soru][9]) #cevap
+    #     self.ShowExamWindow = QtWidgets.QDialog()
+    #     self.ShowExamForm = Ui_sigma()
+    #     self.ShowExamForm.setupUi(self.ShowExamWindow)
+
+    #     self.ShowExamWindow.show()
+    #     self.sorular()
         
         
         
 
-
-
-    def ShowExam(self):
-        
-        self.ShowExamWindow = QtWidgets.QDialog()
-        self.ShowExamForm = Ui_sigma()
-        self.ShowExamForm.setupUi(self.ShowExamWindow)
-
-        self.ShowExamWindow.show()
-        self.dbQuestion()
-
         
         
-#################################EXAM EKRANI BİTİŞ####################################################################################
+##################################################EXAM EKRANI BİTİŞ####################################################################################
 
 
     def ShowUserSettings(self):
