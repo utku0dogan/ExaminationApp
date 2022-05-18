@@ -259,7 +259,7 @@ class myApp(QtWidgets.QMainWindow):
         g_soru = 0
         global answers
         answers= []
-        self.studentEntryForm.zayifKonu_btn.clicked.connect(self.ShowExam)
+        self.studentEntryForm.zayifKonu_btn.clicked.connect(self.ExtQuestions)
 
 
     def showSigmaModule(self):
@@ -337,16 +337,24 @@ class myApp(QtWidgets.QMainWindow):
             self.sigmaWindow.show()
     #----------------------------------------------EXAM EKRANI BAŞLANGIÇ---------------------------------------------------------------
         #---------------------------------------------DB'DEN VERİ CEKME------------------------------------------------------------
+    
+    def ExtQuestions(self):
+        
+        self.connection = sqlite3.connect('examination.db')
+        self.connection.cursor()
+        self.result = self.connection.execute("SELECT * FROM questions ORDER BY random() LIMIT 10")
+        self.questions = self.result.fetchall()
+        self.correctAnswers = []
+        for i in self.questions:
+            self.correctAnswers.append(i[9])
+        self.ShowExam(g_soru)
+    
     def ShowExam(self,g_soru):
         self.ShowExamWindow = QtWidgets.QDialog()
         self.ShowExamForm = Ui_sigma()
         self.ShowExamForm.setupUi(self.ShowExamWindow)
-
         self.ShowExamWindow.show()
-        self.connection = sqlite3.connect('examination.db')
-        self.connection.cursor()
-        self.result = self.connection.execute("SELECT * FROM questions")
-        self.questions = self.result.fetchall()
+        
         global g_NumberQ
         g_NumberQ = len(self.questions)
         CurrentQuestionID = self.questions[g_soru][0]
@@ -379,12 +387,22 @@ class myApp(QtWidgets.QMainWindow):
         elif self.ShowExamForm.d_radio.isChecked():
             answer = 'D'
         print(answer)
-        answers.append(answer) 
+        answers.append(answer)
         self.ShowExamWindow.close()
            
-        if g_soru == 5:
+        if g_soru == 10:
             self.ShowExamWindow.close()
+            print(self.correctAnswers)
             print(answers)
+            dogruSayisi = 0
+            yanlisSayisi = 0
+            for i in range(10):
+                if self.correctAnswers[i] == answers[i]:
+                    dogruSayisi +=1
+                else:
+                    yanlisSayisi +=1
+            self.showMessageBox("SONUC",f"Sinav bitti dogru cevap sayisi {dogruSayisi}, yanlis cevap sayisi {yanlisSayisi} ")
+
         else:
             self.ShowExam(g_soru)
 
