@@ -387,9 +387,12 @@ class myApp(QtWidgets.QMainWindow):
         elif self.ShowExamForm.d_radio.isChecked():
             answer = 'D'
         print(answer)
+
+        
+        
         answers.append(answer)
         self.ShowExamWindow.close()
-           
+        
         if g_soru == 10:
             self.ShowExamWindow.close()
             print(self.correctAnswers)
@@ -404,8 +407,33 @@ class myApp(QtWidgets.QMainWindow):
             self.showMessageBox("SONUC",f"Sinav bitti dogru cevap sayisi {dogruSayisi}, yanlis cevap sayisi {yanlisSayisi} ")
 
         else:
+            rightAnswer = self.questions[g_soru][9]
+            Lid = self.questions[g_soru][1]
+            Uid = self.questions[g_soru][2]
+            if self.questions[g_soru][9] == answer:
+                isTrue = 1
+            else:
+                isTrue = 0
+        
+            self.saveData(answer,rightAnswer, Lid, Uid, isTrue)
             self.ShowExam(g_soru)
 
+    def saveData(self,answer,rightAnswer, Lid, Uid, isTrue):
+        print("icerde")
+        connection = sqlite3.connect('examination.db')
+        connection.cursor()
+        result = connection.execute("SELECT DISTINCT lessonName FROM lessons WHERE Lid = ?",(Lid,))
+        value = result.fetchone()
+        lesson = value[0]
+        result = connection.execute("SELECT DISTINCT unitName FROM units WHERE Uid = ?",(Uid,)) 
+        value = result.fetchone()
+        print(value[0])
+        unit = value[0]
+        connection.execute("Insert Into studentstats (id, answer,rightanswer,lesson,unit,result) VALUES(?,?,?,?,?,?)",(currentUserID, str(answer),rightAnswer, lesson, str(unit), int(isTrue)))
+        connection.commit()
+        connection.close()
+
+        
     # def DB(self):
     #     self.connection = sqlite3.connect('examination.db')
     #     self.connection.cursor()
