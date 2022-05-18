@@ -1,5 +1,6 @@
 from ast import get_source_segment
 from email.mime import application
+from unittest import result
 from PyQt5 import QtWidgets
 import sys
 import time
@@ -11,6 +12,7 @@ from MainWindow import Ui_GirisEkrani
 from SifreUnut import Ui_SifreUnuttum
 from signUp import Ui_signUp
 from addQuestion import Ui_SoruEkle
+from ciktial import Ui_ciktiAl
 from dersEkle import Ui_dersEkle
 from konuEkle import  Ui_addSection
 from StudentEntryPage import Ui_StudentEntry
@@ -253,6 +255,7 @@ class myApp(QtWidgets.QMainWindow):
         self.studentEntryWindow.show()
         self.studentEntryForm.sigma_btn.clicked.connect(self.showSigmaModule)
         self.studentEntryForm.ayarlar_btn.clicked.connect(self.ShowUserSettings)
+        self.studentEntryForm.istatistik_btn.clicked.connect(self.ShowStats)
         global g_qid
         g_qid=0
         global g_soru
@@ -419,7 +422,7 @@ class myApp(QtWidgets.QMainWindow):
             self.ShowExam(g_soru)
 
     def saveData(self,answer,rightAnswer, Lid, Uid, isTrue):
-        print("icerde")
+        
         connection = sqlite3.connect('examination.db')
         connection.cursor()
         result = connection.execute("SELECT DISTINCT lessonName FROM lessons WHERE Lid = ?",(Lid,))
@@ -427,77 +430,69 @@ class myApp(QtWidgets.QMainWindow):
         lesson = value[0]
         result = connection.execute("SELECT DISTINCT unitName FROM units WHERE Uid = ?",(Uid,)) 
         value = result.fetchone()
-        print(value[0])
+    
         unit = value[0]
         connection.execute("Insert Into studentstats (id, answer,rightanswer,lesson,unit,result) VALUES(?,?,?,?,?,?)",(currentUserID, str(answer),rightAnswer, lesson, str(unit), int(isTrue)))
         connection.commit()
         connection.close()
 
-        
-    # def DB(self):
-    #     self.connection = sqlite3.connect('examination.db')
-    #     self.connection.cursor()
-    #     self.result = self.connection.execute("SELECT * FROM questions")
-    #     self.questions = self.result.fetchall()
-    #     self.connection.close()
-    #     return self.questions
-    
-    # def sorular(self):
-    #     global g_questions 
-    #     g_questions = self.DB()
-    #     self.goster()
-    
-    # def ShowQuestion(self, q):
-    #     self.ShowExamForm.question_txt.setText(q[3])
-    #     self.ShowExamForm.a_txt.setText(q[5])
-    #     self.ShowExamForm.b_txt.setText(q[6])
-    #     self.ShowExamForm.c_txt.setText(q[7])
-    #     self.ShowExamForm.d_txt.setText(q[8])
+    def ShowStats(self):
+        self.ShowStatsWindow = QtWidgets.QDialog()
+        self.ShowStatsForm = Ui_ciktiAl()
+        self.ShowStatsForm.setupUi(self.ShowStatsWindow)
+        self.ShowStatsWindow.show()
 
-    #     if not q[4] == '0':
-    #         path = q[4]
-    #         self.pixmap = QPixmap(path)
-    #         self.ShowExamForm.image_lbl.setPixmap(self.pixmap)
-    #         self.ShowExamForm.image_lbl.setScaledContents(True)
-    #     else:
-    #         self.ShowExamForm.image_lbl.setText(" ")
-
-    #     self.ShowExamForm.submit_btn.clicked.connect(self.iArttir)
-
-    
-    
-    
-    # def goster(self):
-    #     #for i in g_questions:
-    #         #self.ShowQuestion(i)
-    #     global g_i
-    #     g_i=0
-    #     self.ShowQuestion(g_questions[g_i])
-    
-    # def iArttir(self):
-    #     g_i +=1
-    #     self.showQuestion(g_questions[g_i])
-
-    # # def ekrandagoster(i):
-    # #     selfformsoru...
-    # #     selfformsoru...
-    # #     SelectFromModel
-    # #     submitbutton next--->
-
-    # def ShowExam(self):
+        connection = sqlite3.connect('examination.db')
+        connection.cursor()
+        result = connection.execute("SELECT lessonName FROM lessons")
+            
+        values = result.fetchall()
+        connection.close()
+        for i in range(len(values)):
+            self.ShowStatsForm.dersSec_cmb.addItem(values[i][0])
         
-    #     self.ShowExamWindow = QtWidgets.QDialog()
-    #     self.ShowExamForm = Ui_sigma()
-    #     self.ShowExamForm.setupUi(self.ShowExamWindow)
+        self.ShowStatsForm.dersSec_cmb.activated[str].connect(self.showDersstats)
+        
+        connection = sqlite3.connect('examination.db')
+        connection.cursor()
+        result = connection.execute("SELECT unitName FROM units")
+            
+        values = result.fetchall()
+        connection.close()
+        for i in range(len(values)):
+            self.ShowStatsForm.konuSec_cmb.addItem(values[i][0])
 
-    #     self.ShowExamWindow.show()
-    #     self.sorular()
-        
-        
-        
+        self.ShowStatsForm.konuSec_cmb.activated[str].connect(self.showKonustats)
 
-        
-        
+    def showDersstats(self):
+        currentLesson = self.ShowStatsForm.dersSec_cmb.currentText()
+        connection = sqlite3.connect('examination.db')
+        connection.cursor()
+        result = connection.execute("SELECT count(*) fROM studentstats WHERE result = 0 and lesson = ?",(currentLesson,))
+        value = result.fetchone()
+        yanlisSayisi = value[0]
+        result = connection.execute("SELECT count(*) fROM studentstats WHERE result = 1 and lesson = ?",(currentLesson,))
+        value = result.fetchone()
+        dogruSayisi = value[0]
+        self.ShowStatsForm.textBrowser_2.setText(str(dogruSayisi))
+        self.ShowStatsForm.textBrowser_4.setText(str(yanlisSayisi))
+
+    def showKonustats(self):
+        currentKonu = self.ShowStatsForm.konuSec_cmb.currentText()
+        connection = sqlite3.connect("examination.db")
+        connection.cursor()
+        result = connection.execute("SELECT count(*) FROM studentstats WHERE result = 0 and unit =?",(currentKonu,))
+        value = result.fetchone()
+        yanlisSayisi = value[0]
+        result = connection.execute("SELECT count(*) FROM studentstats WHERE result = 1 and unit =?",(currentKonu,))
+        value = result.fetchone()
+        dogruSayisi = value[0]
+        self.ShowStatsForm.textBrowser.setText(str(dogruSayisi))
+        self.ShowStatsForm.textBrowser_3.setText(str(yanlisSayisi))
+
+
+
+         
 ##################################################EXAM EKRANI BİTİŞ####################################################################################
 
 

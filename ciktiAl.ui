@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ciktiAl</class>
+ <widget class="QWidget" name="ciktiAl">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>707</width>
+    <height>589</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>stats</string>
+  </property>
+  <widget class="QComboBox" name="dersSec_cmb">
+   <property name="geometry">
+    <rect>
+     <x>130</x>
+     <y>150</y>
+     <width>171</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="konuSec_cmb">
+   <property name="geometry">
+    <rect>
+     <x>400</x>
+     <y>150</y>
+     <width>171</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="dersSec_lbl">
+   <property name="geometry">
+    <rect>
+     <x>170</x>
+     <y>110</y>
+     <width>101</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Ders Seç</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="konuSec_lbl">
+   <property name="geometry">
+    <rect>
+     <x>450</x>
+     <y>110</y>
+     <width>101</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Konu Seç</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_3">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>380</y>
+     <width>91</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Konuya göre:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_5">
+   <property name="geometry">
+    <rect>
+     <x>20</x>
+     <y>430</y>
+     <width>71</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Derse göre:</string>
+   </property>
+  </widget>
+  <widget class="QTextBrowser" name="textBrowser">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>380</y>
+     <width>41</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_4">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>380</y>
+     <width>71</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>dogru sayisi:</string>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_6">
+   <property name="geometry">
+    <rect>
+     <x>390</x>
+     <y>380</y>
+     <width>81</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>yanlis sayisi:</string>
+   </property>
+  </widget>
+  <widget class="QTextBrowser" name="textBrowser_3">
+   <property name="geometry">
+    <rect>
+     <x>470</x>
+     <y>380</y>
+     <width>41</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_7">
+   <property name="geometry">
+    <rect>
+     <x>390</x>
+     <y>430</y>
+     <width>81</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>yanlis sayisi:</string>
+   </property>
+  </widget>
+  <widget class="QTextBrowser" name="textBrowser_2">
+   <property name="geometry">
+    <rect>
+     <x>270</x>
+     <y>430</y>
+     <width>41</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QLabel" name="label_8">
+   <property name="geometry">
+    <rect>
+     <x>190</x>
+     <y>430</y>
+     <width>71</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>dogru sayisi:</string>
+   </property>
+  </widget>
+  <widget class="QTextBrowser" name="textBrowser_4">
+   <property name="geometry">
+    <rect>
+     <x>470</x>
+     <y>430</y>
+     <width>41</width>
+     <height>31</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="pushButton">
+   <property name="geometry">
+    <rect>
+     <x>540</x>
+     <y>520</y>
+     <width>93</width>
+     <height>28</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Çıktı Al</string>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
