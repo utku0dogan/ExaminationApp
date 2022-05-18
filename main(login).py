@@ -13,6 +13,7 @@ from SifreUnut import Ui_SifreUnuttum
 from signUp import Ui_signUp
 from addQuestion import Ui_SoruEkle
 from ciktial import Ui_ciktiAl
+from admin import Ui_admin
 from dersEkle import Ui_dersEkle
 from konuEkle import  Ui_addSection
 from StudentEntryPage import Ui_StudentEntry
@@ -28,15 +29,17 @@ class myApp(QtWidgets.QMainWindow):
 
     def __init__(self):
         super(myApp, self).__init__()
+        
         self.loginUi = Ui_GirisEkrani()
         self.loginUi.setupUi(self)
+        self.loginUi.txtSifre.setEchoMode(QtWidgets.QLineEdit.Password)
         self.loginUi.btnGiris.clicked.connect(self.login)
         self.loginUi.btnKayit.clicked.connect(self.signUpShow)
         self.loginUi.btnSifremiUnuttum.clicked.connect(self.ShowSifreUnut)
 
     
     def login(self):
-    
+        
         username = self.loginUi.txtKullaniciAd.text()
         password = self.loginUi.txtSifre.text()
         userType = 0
@@ -67,6 +70,8 @@ class myApp(QtWidgets.QMainWindow):
                 self.addQuestionShow()
             if userType == 2:
                 self.showStudentEntry()
+            if userType == 1:
+                self.showAdminEntry()
                 
             
         else:
@@ -80,8 +85,70 @@ class myApp(QtWidgets.QMainWindow):
         msgBox.setText(message)
         msgBox.setStandardButtons(QtWidgets.QMessageBox.Ok)
         msgBox.exec_()
-    #------------------------------------SINAV SORUMLUSUNUN SORU EKLEME EKRANI BAŞLANGIÇ----------------------------------------------------------------
     
+    #admin******************************************
+
+    def showAdminEntry(self):
+        self.adminWindow = QtWidgets.QDialog()
+        self.adminForm = Ui_admin()
+        self.adminForm.setupUi(self.adminWindow)
+        self.adminWindow.show()
+        
+        connection = sqlite3.connect("examination.db")
+        cur = connection.cursor()
+        self.adminForm.tableWidget.setRowCount(100)
+        tablerow = 0
+        for row in cur.execute("SELECT Qid, questionText, isActive FROM questions WHERE isActive = ?",(0,)):
+            self.adminForm.tableWidget.setItem(tablerow, 0, QtWidgets.QTableWidgetItem(row[0]))
+            self.adminForm.tableWidget.setItem(tablerow, 1, QtWidgets.QTableWidgetItem(row[1]))
+            self.adminForm.tableWidget.setItem(tablerow, 2, QtWidgets.QTableWidgetItem(row[2]))
+            tablerow+=1
+        
+        
+        result = connection.execute("SELECT Qid, questionText, isActive FROM questions WHERE isActive = ?",(0,))
+        values = result.fetchall()
+        rowPosition = self.adminForm.tableWidget.rowCount()
+        
+        connection.close()
+        
+        for satirIndeks, satirVeri in enumerate(values):
+            self.adminForm.tableWidget.insertRow(rowPosition)
+            for sutunIndeks, sutunVeri in enumerate (satirVeri):
+                
+                self.adminForm.tableWidget.setItem(satirIndeks,sutunIndeks,QtWidgets.QTableWidgetItem(str(sutunVeri)) )
+                
+        self.adminForm.pushButton.clicked.connect(self.degis)
+
+    def degis(self):
+        secili = self.adminForm.tableWidget.selectedItems()
+        secili_id = int(secili[0].text())
+
+        connection = sqlite3.connect("examination.db")
+        connection.cursor()
+        connection.execute("UPDATE questions SET isActive= ? WHERE Qid =?",(1,secili_id))
+        connection.commit()
+        connection.close()
+        self.adminWindow.close()
+        self.showAdminEntry()
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    #------------------------------------SINAV SORUMLUSUNUN SORU EKLEME EKRANI BAŞLANGIÇ----------------------------------------------------------------
+
+
+
+
+
+
     def addQuestionShow(self): #sinav sorumlusunun soru ekleme kısmı
         #--------------------------------------------------------------------------------
         self.addQuestionWindow = QtWidgets.QDialog()
@@ -94,7 +161,7 @@ class myApp(QtWidgets.QMainWindow):
             
             values = result.fetchall()
             connection.close()
-            print(values)
+            
             for i in range(len(values)):
                 self.addQuestionForm.DersSec_cmbox.addItem(values[i][0])
         
@@ -139,7 +206,7 @@ class myApp(QtWidgets.QMainWindow):
             
     def dersEkle(self):
         lessonName = self.showDersEkleForm.lineEdit.text()
-        print(lessonName)
+        
         connection = sqlite3.connect('examination.db')
         connection.cursor()
         connection.execute("INSERT INTO lessons (lessonName) VALUES(?)",(lessonName,))
@@ -285,7 +352,7 @@ class myApp(QtWidgets.QMainWindow):
         Qids = []
         for i in range(len(values)):
             Qids.append(values[i][0])
-        print(Qids)
+        
     
         for i in range(len(Qids)):
             connection = sqlite3.connect('examination.db')
@@ -293,8 +360,7 @@ class myApp(QtWidgets.QMainWindow):
             result = connection.execute("SELECT imagePath FROM questions WHERE Qid = ?",(Qids[i],))
             value = result.fetchone()
             connection.close()
-            print(value)
-            print('value[0][0]: ' + value[0][0])
+            
             
         
             if value[0][0] == '0':
@@ -361,7 +427,7 @@ class myApp(QtWidgets.QMainWindow):
         global g_NumberQ
         g_NumberQ = len(self.questions)
         CurrentQuestionID = self.questions[g_soru][0]
-        print(CurrentQuestionID)
+        
         self.ShowExamForm.question_txt.setText(self.questions[g_soru][3])
         self.ShowExamForm.a_txt.setText(self.questions[g_soru][5])
         self.ShowExamForm.b_txt.setText(self.questions[g_soru][6])
@@ -389,7 +455,7 @@ class myApp(QtWidgets.QMainWindow):
             answer = 'C'
         elif self.ShowExamForm.d_radio.isChecked():
             answer = 'D'
-        print(answer)
+        
 
         
         
@@ -398,8 +464,7 @@ class myApp(QtWidgets.QMainWindow):
         
         if g_soru == 10:
             self.ShowExamWindow.close()
-            print(self.correctAnswers)
-            print(answers)
+        
             dogruSayisi = 0
             yanlisSayisi = 0
             for i in range(10):
@@ -624,7 +689,7 @@ class myApp(QtWidgets.QMainWindow):
         result = connection.execute("SELECT * FROM users WHERE username =? AND validationAnswer=?",(username,validation))
         row = result.fetchone()
         
-        print(row)
+        
         if row:
             connection = sqlite3.connect('examination.db')
             connection.execute("UPDATE users SET password = ? WHERE userName = ? AND validationAnswer = ?",(newPassword, username,validation))
