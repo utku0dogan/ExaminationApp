@@ -4,6 +4,7 @@ from unittest import result
 from PyQt5 import QtWidgets
 import sys
 import time
+import datetime
 from PyQt5.QtPrintSupport import QPrintDialog, QPrinter, QPrintPreviewDialog
 from sklearn.feature_selection import SelectFromModel
 from GorselEkle import GorselEkle
@@ -134,7 +135,7 @@ class myApp(QtWidgets.QMainWindow):
     
     
     
-    
+    #---------------------------------------------admin bitiş---------------------------------------------------
     
     
     
@@ -305,7 +306,7 @@ class myApp(QtWidgets.QMainWindow):
 
 
 
-    #---------------------------------------------------------ÖĞRENCİ EKRANI BAŞLANGIÇ-------------------------------------------------------------
+    #########################################################ÖĞRENCİ EKRANI BAŞLANGIÇ####################################################################
     
     def showStudentEntry(self):
         self.studentEntryWindow = QtWidgets.QDialog()
@@ -320,91 +321,61 @@ class myApp(QtWidgets.QMainWindow):
         connection.close()
         self.studentEntryForm.welcome_lbl.setText("Hos geldiniz, " + currentUserName + ' basarilar...')
         self.studentEntryWindow.show()
-        self.studentEntryForm.sigma_btn.clicked.connect(self.showSigmaModule)
+        
         self.studentEntryForm.ayarlar_btn.clicked.connect(self.ShowUserSettings)
         self.studentEntryForm.istatistik_btn.clicked.connect(self.ShowStats)
         global g_qid
         g_qid=0
         global g_soru
+        global sigma_g_soru
+        sigma_g_soru = 0
         g_soru = 0
         global answers
         answers= []
         self.studentEntryForm.zayifKonu_btn.clicked.connect(self.ExtQuestions)
-
-
-    def showSigmaModule(self):
-        self.sigmaWindow = QtWidgets.QDialog()
-        self.sigmaForm = Ui_sigma()
-        self.sigmaForm.setupUi(self.sigmaWindow)
-        
-            
-        
-        self.extractQuestionDB()
+        self.studentEntryForm.sigma_btn.clicked.connect(self.SigmaQuestions)
+    #---------------------------------------------------sigma ekrani baslangic------------------------------
+    def SigmaQuestions(self):
+        self.connections = sqlite3.connect('examination.db')
+        self.connections.cursor()
+        self.results = self.connections.execute("SELECT * FROM questions ORDER BY random() LIMIT 10")
+        self.sigmaQuestions = self.results.fetchall()
+        self.sigmaCorrectAnswers = []
+        self.showSigmaModule(sigma_g_soru)
     
-    def extractQuestionDB(self):
-        
-        connection = sqlite3.connect('examination.db')
-        connection.cursor()
-        result = connection.execute("SELECT Qid FROM questions")
-        values = result.fetchall()
-        
-        connection.close()
-        Qids = []
-        for i in range(len(values)):
-            Qids.append(values[i][0])
-        
     
-        for i in range(len(Qids)):
-            connection = sqlite3.connect('examination.db')
-            connection.cursor()
-            result = connection.execute("SELECT imagePath FROM questions WHERE Qid = ?",(Qids[i],))
-            value = result.fetchone()
-            connection.close()
-            
-            
+    
+    
+    def showSigmaModule(self,sigma_g_soru):
+        self.ShowSigmaWindow = QtWidgets.QDialog()
+        self.ShowSigmaForm = Ui_sigma()
+        self.ShowSigmaForm.setupUi(self.ShowSigmaWindow)
+        self.ShowSigmaWindow.show()
         
-            if value[0][0] == '0':
-                connection = sqlite3.connect('examination.db')
-                connection.cursor()
-                result = connection.execute("SELECT questionText, chooseA, chooseB, choosec, chooseD  FROM questions WHERE Qid = ?",(Qids[i],))
-                values = result.fetchone()
-                connection.close()
-                
-                self.showQuestion(values)
-                
-            else:
-                connection = sqlite3.connect('examination.db')
-                connection.cursor()
-                result = connection.execute("SELECT questionText, chooseA, chooseB, choosec, chooseD, imagePath  FROM questions WHERE Qid = ?",(Qids[i],))
-                values = result.fetchone()
-                connection.close()
-                
-                self.showQuestion(values)
+        self.ShowSigmaForm.question_txt.setText(self.sigmaQuestions[sigma_g_soru][3])
+        self.ShowSigmaForm.a_txt.setText(self.sigmaQuestions[sigma_g_soru][5])
+        self.ShowSigmaForm.b_txt.setText(self.sigmaQuestions[sigma_g_soru][6])
+        self.ShowSigmaForm.c_txt.setText(self.sigmaQuestions[sigma_g_soru][7])
+        self.ShowSigmaForm.d_txt.setText(self.sigmaQuestions[sigma_g_soru][8])
 
-    def showQuestion(self, values):
-        if len(values) == 5:
-            self.sigmaForm.question_txt.setText(values[0])
-            self.sigmaForm.a_txt.setText(values[1])
-            self.sigmaForm.b_txt.setText(values[2])
-            self.sigmaForm.c_txt.setText(values[3])
-            self.sigmaForm.d_txt.setText(values[4])
-            
-            self.sigmaWindow.show()
-            
-        if len(values) == 6:
-            self.sigmaForm.question_txt.setText(values[0])
-            self.sigmaForm.a_txt.setText(values[1])
-            self.sigmaForm.b_txt.setText(values[2])
-            self.sigmaForm.c_txt.setText(values[3])
-            self.sigmaForm.d_txt.setText(values[4])
-            path = values[5]
-            
+        if not self.sigmaQuestions[sigma_g_soru][4] == '0':
+            path = self.sigmaQuestions[sigma_g_soru][4]
             self.pixmap = QPixmap(path)
-            self.sigmaForm.image_lbl.setPixmap(self.pixmap)
-            self.sigmaForm.image_lbl.setScaledContents(True)
-            
-            self.sigmaWindow.show()
-    #----------------------------------------------EXAM EKRANI BAŞLANGIÇ---------------------------------------------------------------
+            self.ShowSigmaForm.image_lbl.setPixmap(self.pixmap)
+            self.ShowSigmaForm.image_lbl.setScaledContents(True)
+        else:
+            self.ShowSigmaForm.image_lbl.setText(" ")
+        self.ShowSigmaForm.submit_btn.clicked.connect(lambda: self.submitButton(sigma_g_soru))
+
+    def submitButton(self,sigma_g_soru):
+        sigma_g_soru+=1
+        self.ShowSigmaWindow.close()
+        if sigma_g_soru == 10:
+            self.ShowSigmaWindow.close()
+            self.showStudentEntry()
+        else:
+            self.showSigmaModule(sigma_g_soru)
+    #----------------------------------------------exam ekrani baslangic---------------------------------------------------------------
         #---------------------------------------------DB'DEN VERİ CEKME------------------------------------------------------------
     
     def ExtQuestions(self):
@@ -414,6 +385,7 @@ class myApp(QtWidgets.QMainWindow):
         self.result = self.connection.execute("SELECT * FROM questions ORDER BY random() LIMIT 10")
         self.questions = self.result.fetchall()
         self.correctAnswers = []
+    
         for i in self.questions:
             self.correctAnswers.append(i[9])
         self.ShowExam(g_soru)
@@ -442,6 +414,7 @@ class myApp(QtWidgets.QMainWindow):
         else:
             self.ShowExamForm.image_lbl.setText(" ")
         self.ShowExamForm.submit_btn.clicked.connect(lambda: self.sumbitbutton(g_soru))
+        
         
 
     def sumbitbutton(self,g_soru): 
@@ -473,6 +446,7 @@ class myApp(QtWidgets.QMainWindow):
                 else:
                     yanlisSayisi +=1
             self.showMessageBox("SONUC",f"Sinav bitti dogru cevap sayisi {dogruSayisi}, yanlis cevap sayisi {yanlisSayisi} ")
+            self.showStudentEntry()
 
         else:
             rightAnswer = self.questions[g_soru][9]
@@ -485,7 +459,7 @@ class myApp(QtWidgets.QMainWindow):
         
             self.saveData(answer,rightAnswer, Lid, Uid, isTrue)
             self.ShowExam(g_soru)
-
+#------------------------------istatistik başlangıc--------------------------------------------
     def saveData(self,answer,rightAnswer, Lid, Uid, isTrue):
         
         connection = sqlite3.connect('examination.db')
@@ -576,7 +550,7 @@ class myApp(QtWidgets.QMainWindow):
  
         def printPreview(self, printer):
             self.textEdit.print_(printer)  
-
+#----------------------------------------------istatistik bitiş------------------------------------------------------------------
 
          
 ##################################################EXAM EKRANI BİTİŞ####################################################################################

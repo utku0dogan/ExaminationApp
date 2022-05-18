@@ -1,3 +1,4 @@
+sigma db algoritması
 CURRENT UİD ÜZERİNDEN
 ----ilk gün
 timesKnown 0 olanlardan rastgele 10 tane getir.
