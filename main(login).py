@@ -4,7 +4,7 @@ from unittest import result
 from PyQt5 import QtWidgets
 import sys
 import time
-
+from PyQt5.QtPrintSupport import QPrintDialog, QPrinter, QPrintPreviewDialog
 from sklearn.feature_selection import SelectFromModel
 from GorselEkle import GorselEkle
 from psutil import cpu_count
@@ -441,7 +441,6 @@ class myApp(QtWidgets.QMainWindow):
         self.ShowStatsForm = Ui_ciktiAl()
         self.ShowStatsForm.setupUi(self.ShowStatsWindow)
         self.ShowStatsWindow.show()
-
         connection = sqlite3.connect('examination.db')
         connection.cursor()
         result = connection.execute("SELECT lessonName FROM lessons")
@@ -463,6 +462,9 @@ class myApp(QtWidgets.QMainWindow):
             self.ShowStatsForm.konuSec_cmb.addItem(values[i][0])
 
         self.ShowStatsForm.konuSec_cmb.activated[str].connect(self.showKonustats)
+        self.ShowStatsForm.pushButton.clicked.connect(self.cikti)
+    
+    
 
     def showDersstats(self):
         currentLesson = self.ShowStatsForm.dersSec_cmb.currentText()
@@ -489,7 +491,26 @@ class myApp(QtWidgets.QMainWindow):
         dogruSayisi = value[0]
         self.ShowStatsForm.textBrowser.setText(str(dogruSayisi))
         self.ShowStatsForm.textBrowser_3.setText(str(yanlisSayisi))
-
+        self.ShowStatsForm.textBrowser_5.append(f"{currentKonu} dogru sayisi: {dogruSayisi} yanlis sayisi: {yanlisSayisi}\n")
+    
+    def cikti(self):
+        
+        printer = QPrinter(QPrinter.HighResolution)
+        dialog = QPrintDialog(printer, self)
+        if dialog.exec_() == QPrintDialog.Accepted:
+            self.ShowStatsForm.textBrowser_5.print_(printer)
+        
+ 
+ 
+        def printpreviewDialog(self):
+            printer = QPrinter(QPrinter.HighResolution)
+            previewDialog = QPrintPreviewDialog(printer, self)
+            previewDialog.paintRequested.connect(self.printPreview)
+            previewDialog.exec_()
+ 
+ 
+        def printPreview(self, printer):
+            self.textEdit.print_(printer)  
 
 
          
