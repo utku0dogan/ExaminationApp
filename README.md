@@ -50,7 +50,7 @@ Tablolar
 
 ![image](https://user-images.githubusercontent.com/59983461/169147715-f91b335d-63da-4e4c-bb0c-8154dae03517.png)
 
-# admin soru onay
+# admin soru onay page
 
 ![image](https://user-images.githubusercontent.com/59983461/169147759-c6af5cba-62aa-4f70-8972-dac30dfff52f.png)
 
