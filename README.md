@@ -32,10 +32,32 @@ Tablolar
 
 ## Ogrenci Giris
 
+1
+![image](https://user-images.githubusercontent.com/59983461/169147208-3f0c3cea-648f-4e06-890a-85dcb433dd08.png)
+
+## Exam Ekranı ve Sigma öğrenme Ekranı
+
+![image](https://user-images.githubusercontent.com/59983461/169147319-93a0a738-2e4b-4b89-8677-fc931efad24e.png)
+
+## istatistik
+
+![image](https://user-images.githubusercontent.com/59983461/169147458-38aa4593-1095-46f6-9fc0-8a9dcb713418.png)
+
+## ogrenci ayar
+
+![image](https://user-images.githubusercontent.com/59983461/169147519-7e5c384d-5a6d-432d-94da-96d7e7f2475d.png)
+
+## sinav sorumlusu soru ekleme
+
+![image](https://user-images.githubusercontent.com/59983461/169147715-f91b335d-63da-4e4c-bb0c-8154dae03517.png)
+
+# admin soru onay page
+
+![image](https://user-images.githubusercontent.com/59983461/169147759-c6af5cba-62aa-4f70-8972-dac30dfff52f.png)
 
 
 
-## ALGORITMA
+# ALGORITMA
 
 bir öğrencinin soruyu tamamen bilmiş (öğrenmiş) sayılabilmesi için o soruyu belli periyotlarla üst üste 6 kez bilmesi gerek.
 periyodumuz 1 gün, 1 hafta, 1 ay, 3 ay, 6 ay, 1 yıl olsun 
@@ -96,29 +118,5 @@ rastgele çıkacak sorular: 11 - 12 - 15 - 63 - 76 - 32 - 54 - 39 - 49 - 99
 dün ilk defa bildiği sorular 53 - 21
 bir hafta önce ikinci kez bildiği sorular: 1 - 32 
 yani totalde karşısına çıkacak sorular:  11 - 12 - 15 - 63 - 76 - 32 - 54 - 39 - 49 - 99 - 53 - 21 - 1 - 32 
-1
-![image](https://user-images.githubusercontent.com/59983461/169147208-3f0c3cea-648f-4e06-890a-85dcb433dd08.png)
-
-## Exam Ekranı ve Sigma öğrenme Ekranı
-
-![image](https://user-images.githubusercontent.com/59983461/169147319-93a0a738-2e4b-4b89-8677-fc931efad24e.png)
-
-## istatistik
-
-![image](https://user-images.githubusercontent.com/59983461/169147458-38aa4593-1095-46f6-9fc0-8a9dcb713418.png)
-
-## ogrenci ayar
-
-![image](https://user-images.githubusercontent.com/59983461/169147519-7e5c384d-5a6d-432d-94da-96d7e7f2475d.png)
-
-## sinav sorumlusu soru ekleme
-
-![image](https://user-images.githubusercontent.com/59983461/169147715-f91b335d-63da-4e4c-bb0c-8154dae03517.png)
-
-# admin soru onay page
-
-![image](https://user-images.githubusercontent.com/59983461/169147759-c6af5cba-62aa-4f70-8972-dac30dfff52f.png)
-
-
 
 
